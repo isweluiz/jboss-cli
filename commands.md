@@ -88,6 +88,38 @@
 {"outcome" => "success"
 
 
+### Handling server start/stop/restart/reload
+
+> `/server-group=main-server-group:start-servers`
+
+> `/server-group=main-server-group:restart-servers`
+
+>`/server-group=main-server-group:stop-servers`
+
+>`/server-group=main-server-group:reload-servers`
+
+
+### A practical script for shutting down a domain
+>`./jboss-cli.sh --connect controller=192.168.10.1:9990 /host=slave:shutdown`
+
+>`./jboss-cli.sh --connect controller=192.168.10.1:9990 /host=master:shutdown`
+
+### How to un-assign an application from a Server Group
+>`/server-group=main-server-group/deployment=web-demo.war:remove`
+
+### How to remove an application from the Repository
+> `/deployment=web-demo.war:remove`
+
+# Deploy
+### A practical bash script for deploying one application
+> `./jboss-cli.sh --connect controller=192.168.10.1:9990 --commands="deploy $1  --server-groups=main-server-group"`
+
+### And to undeploy the application
+ >`./jboss-cli.sh --connect controller=192.168.10.1:9990 --commands="undeploy $1  --all-relevant-server-groups"`
+
+
+
+
 
 ### For new instances location, copy this folders
 * configuration
