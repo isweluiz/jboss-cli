@@ -166,7 +166,8 @@ application with the same runtime name will eventually cause a conflict
 
 > `[domain@localhost:9990 /] deploy /home/jboss/projects/webapp.war --disabled`
 
-`[domain@localhost:9990 /] deployment-info --name=webapp.war`
+> `[domain@localhost:9990 /] deployment-info --name=webapp.war`
+
 NAME RUNTIME-NAME
 webapp.war webapp.war
 SERVER-GROUP STATE
