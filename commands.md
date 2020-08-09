@@ -176,81 +176,81 @@ other-server-group not added
 ```
 
 
-CLI Useful Commands
-General data
-jboss Jvm OS Name:
-/core-service=platform-mbean/type=operating-system:read-attribute(name=name)
+## CLI Useful Commands
 
-jboss Jvm OS Version:
-/core-service=platform-mbean/type=operating-system:read-attribute(name=version)
+- jboss Jvm OS Name:
+> `/core-service=platform-mbean/type=operating-system:read-attribute(name=name)`
 
-Status
+- jboss Jvm OS Version:
+> `/core-service=platform-mbean/type=operating-system:read-attribute(name=version)`
+
+- Status
 read-attribute(name=server-state)
 read-attribute(name=status)
 
-Mbean – Complete Resource
-/core-service=platform-mbean/type=memory:read-resource(include-runtime=true)
-/core-service=platform-mbean/type=threading:read-resource(include-runtime=true)
-/core-service=platform-mbean/type=memory-manager:read-resource(include-runtime=true)
-/core-service=platform-mbean/type=memory-pool:read-resource(include-runtime=true)
-/core-service=platform-mbean/type=garbage-collector:read-resource(include-runtime=true)
-/core-service=platform-mbean/type=operating-system:read-resource(include-runtime=true)
+#### Mbean – Complete Resource
+> `/core-service=platform-mbean/type=memory:read-resource(include-runtime=true)`
+> `/core-service=platform-mbean/type=threading:read-resource(include-runtime=true)`
+> `/core-service=platform-mbean/type=memory-manager:read-resource(include-runtime=true)`
+> `/core-service=platform-mbean/type=memory-pool:read-resource(include-runtime=true)`
+> `/core-service=platform-mbean/type=garbage-collector:read-resource(include-runtime=true)`
+> `/core-service=platform-mbean/type=operating-system:read-resource(include-runtime=true)`
 
-Memory
-/core-service=platform-mbean/type=memory:read-attribute(name=heap-memory-usage)
-/core-service=platform-mbean/type=memory:read-attribute(name=heap-memory-usage)
-/core-service=platform-mbean/type=memory:read-attribute(name=heap-memory-usage)
-/core-service=platform-mbean/type=memory:read-attribute(name=non-heap-memory-usage)
-/core-service=platform-mbean/type=memory:read-attribute(name=non-heap-memory-usage)
-/core-service=platform-mbean/type=memory:read-attribute(name=non-heap-memory-usage)
+### Memory
+> `/core-service=platform-mbean/type=memory:read-attribute(name=heap-memory-usage)`
+> `/core-service=platform-mbean/type=memory:read-attribute(name=heap-memory-usage)`
+> `/core-service=platform-mbean/type=memory:read-attribute(name=heap-memory-usage)`
+> `/core-service=platform-mbean/type=memory:read-attribute(name=non-heap-memory-usage)`
+> `/core-service=platform-mbean/type=memory:read-attribute(name=non-heap-memory-usage)`
+> `/core-service=platform-mbean/type=memory:read-attribute(name=non-heap-memory-usage)`
 
-GC
-/core-service=platform-mbean/type=garbage-collector/name=PS_MarkSweep:read-attribute(name=collection-count)
-/core-service=platform-mbean/type=garbage-collector/name=PS_MarkSweep:read-attribute(name=collection-time)
-/core-service=platform-mbean/type=garbage-collector/name=PS_Scavenge:read-attribute(name=collection-count)
-/core-service=platform-mbean/type=garbage-collector/name=PS_Scavenge:read-attribute(name=collection-time)
+### GC
+> `/core-service=platform-mbean/type=garbage-collector/name=PS_MarkSweep:read-attribute(name=collection-count)`
+> `/core-service=platform-mbean/type=garbage-collector/name=PS_MarkSweep:read-attribute(name=collection-time)`
+> `/core-service=platform-mbean/type=garbage-collector/name=PS_Scavenge:read-attribute(name=collection-count)`
+> `/core-service=platform-mbean/type=garbage-collector/name=PS_Scavenge:read-attribute(name=collection-time)`
 
-Threads
-/core-service=platform-mbean/type=threading:read-attribute(name=thread-count)
-/core-service=platform-mbean/type=threading:read-attribute(name=daemon-thread-count)
-/core-service=platform-mbean/type=threading:read-attribute(name=current-thread-cpu-time)
+### Threads
+> `/core-service=platform-mbean/type=threading:read-attribute(name=thread-count)`
+> `/core-service=platform-mbean/type=threading:read-attribute(name=daemon-thread-count)`
+> `/core-service=platform-mbean/type=threading:read-attribute(name=current-thread-cpu-time)`
 
-Datasources
-Jboss DataSource Pool Active Count :
-/subsystem=datasources/data-source=%1$s/statistics=pool:read-attribute(name=ActiveCount)
+### Datasources
+- Jboss DataSource Pool Active Count :
+> `/subsystem=datasources/data-source=%1$s/statistics=pool:read-attribute(name=ActiveCount)`
 
-Jboss DataSource Pool Size:
-/subsystem=datasources/data-source=%1$s:read-attribute(name=max-pool-size)
+- Jboss DataSource Pool Size:
+> `/subsystem=datasources/data-source=%1$s:read-attribute(name=max-pool-size)`
 
-Jboss Datasource Max Pool Size:
-/subsystem=datasources/data-source=%1$s:read-attribute(name=max-pool-size)
+- Jboss Datasource Max Pool Size:
+> `/subsystem=datasources/data-source=%1$s:read-attribute(name=max-pool-size)`
 
-Jboss Datasource Min Pool Size:
-/subsystem=datasources/data-source=%1$s:read-attribute(name=min-pool-size)
+- Jboss Datasource Min Pool Size:
+> `/subsystem=datasources/data-source=%1$s:read-attribute(name=min-pool-size)`
 
-/subsystem=datasources/data-source=SimulatorDS/statistics=pool
-/subsystem=datasources/data-source=SimulatorDS/statistics=pool
+> `/subsystem=datasources/data-source=SimulatorDS/statistics=pool`
+> `/subsystem=datasources/data-source=SimulatorDS/statistics=pool`
 
-/subsystem=datasources/data-source=DataSource/statistics=pool
-ATTR_NAME= "AvailableCount"
+> `/subsystem=datasources/data-source=DataSource/statistics=pool`
+`ATTR_NAME= "AvailableCount"`
 
-/subsystem=datasources/data-source=DataSource/statistics=pool
-ATTR_NAME= "MaxUsedCount"
+>`/subsystem=datasources/data-source=DataSource/statistics=pool`
+`ATTR_NAME= "MaxUsedCount"`
 
- 
+### Deployments
+- Jboss Application Status:
+> `/deployment=%3$s:read-attribute(name=status)`
 
-Deployments
-Jboss Application Status:
-/deployment=%3$s:read-attribute(name=status)
+- Jboss Application Active Session count:
+> `deployment=%1$s/subsystem=web:read-attribute(name=active-sessions)!sum(/:host,/:server)`
 
-Jboss Application Active Session count:
-deployment=%1$s/subsystem=web:read-attribute(name=active-sessions)!sum(/:host,/:server)
-
-Hits
-JVM Hits:
-/server=Servername/subsystem=web/connector=http:read-attribute(name=requestCount)
+- Hits
+- JVM Hits:
+> `/server=Servername/subsystem=web/connector=http:read-attribute(name=requestCount)`
 
 
+
+```json
 [domain@192.168.99.110:9990 subsystem=messaging-activemq] pwd
 /host=servera/server=serverA.1/subsystem=messaging-activemq
 [domain@192.168.99.110:9990 subsystem=messaging-activemq] ./server=default/cluster-connection=my-cluster:read-attribute(name=topology)
@@ -263,20 +263,17 @@ JVM Hits:
     256d703b-cc15-11ea-94a7-698f306ed1b7 => TopologyMember[id = 256d703b-cc15-11ea-94a7-698f306ed1b7, connector=Pair[a=TransportConfiguration(name=http-connector, factory=org-apache-activemq-artemis-core-remoting-impl-netty-NettyConnectorFactory) ?httpUpgradeEnabled=true&httpPpgradeEndpoint=http-acceptor&port=8080&host=192-168-99-108, b=null], backupGroupName=null, scaleDownGroupName=null]
     nodes=4    members=4"
 }
-[domain@192.168.99.110:9990 subsystem=messaging-activemq] 
+[domain@192.168.99.110:9990 subsystem=messaging-activemq
+```
+] 
 
+### Ativar/Remover autenticação local
 
+>`[standalone@locahost:10990 /] /core-service=management/\security-realm=ManagementRealm/authentication=local:remove()`
 
-Ativar autenticação local
+### Para remover a autenticação local do servidor standalone, execute o seguinte comando:
 
-[standalone@locahost:10990 /] /core-service=management/\
-security-realm=ManagementRealm/authentication=local:remove()
-
-
-Para ativar a autenticação local do servidor standalone, execute o seguinte comando:
-
-[domain@172.25.250.254:9990 /]/host=master/core-service=management\
-/security-realm=ManagementRealm/authentication=local:remove()
+> `[domain@172.25.250.254:9990 /]/host=master/core-service=management\/security-realm=ManagementRealm/authentication=local:remove()`
 
 ### For new instances location, copy this folders
 * configuration
