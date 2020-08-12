@@ -1,5 +1,5 @@
 
-# Start and Stop instances JbossEap in on Action of zabbix
+# Start and Stop instances JbossEap in a Action in zabbix
 
 
 ### Start Instances Jboss
