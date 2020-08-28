@@ -1,0 +1,155 @@
+Ferramenta para avaliação de uso de espaço em disco (NCDU - Ncurses Disk Usage)
+
+###########################################################################
+Requisitos:
+ 
+- Usuário com permissão Nível 2 (N2) para se conectar e reiniciar serviços através de sudo na máquina;
+- Permissão para acessar como usuário Root.
+Atuação:
+
+1- É comum que ocorra, que arquivos previamente apagados continuem a ser referenciados por processos ativos. Assim, continuam a ocupar espaço em disco.
+Para solucionar esse problema, siga o procedimento abaixo:
+
+a) Verificar o espaço livre com o comando:
+
+# df -lh
+
+b) Em seguida, executar o comando:
+
+# lsof -nP +L1
+
+c) Este comando anterior, retornará uma listagem da seguinte forma:
+
+
+COMMAND   PID    USER  FD   TYPE  DEVICE   SIZE          NLINK          NODE NAME
+zabbix_ag        3682   root     1w     REG    8,1    1048865     0 1139047     /tmp/zabbix_agentd.log.old (deleted)
+zabbix_ag        3682   root     2w     REG    8,1    1048865     0 1139047     /tmp/zabbix_agentd.log.old (deleted)
+zabbix_ag        3682   root     3wW REG     8,1       4              0 1139045     /tmp/zabbix_agentd.pid (deleted)
+zabbix_ag        3684   root     1w     REG    8,1    1048865     0 1139047     /tmp/zabbix_agentd.log.old (deleted)
+zabbix_ag        3684   root     2w     REG    8,1    1048865     0 1139047     /tmp/zabbix_agentd.log.old (deleted)
+zabbix_ag        3684   root     3w     REG    8,1      4               0 1139045     /tmp/zabbix_agentd.pid (deleted)
+zabbix_ag        3685   root     3w     REG    8,1      4               0 1139045     /tmp/zabbix_agentd.pid (deleted)
+zabbix_ag        3686   root     3w     REG    8,1      4               0 1139045     /tmp/zabbix_agentd.pid (deleted)
+zabbix_ag        3687   root     3w     REG    8,1      4               0 1139045     /tmp/zabbix_agentd.pid (deleted)
+zabbix_ag        3688   root     1w     REG    8,1     1048865    0 1139047     /tmp/zabbix_agentd.log.old (deleted)
+zabbix_ag        3688   root     2w     REG    8,1     1048865    0 1139047     /tmp/zabbix_agentd.log.old (deleted)
+zabbix_ag        3688   root     3w     REG    8,1        4             0 1139045     /tmp/zabbix_agentd.pid (deleted)
+ 
+
+d) Verifique na listagem os maiores valores para “SIZE” e execute o seguinte comando substituindo o “PID” correspondente:
+
+# ls -la /proc/PID/fd
+
+e) O comando retornará uma listagem da seguinte forma:
+
+total 0
+dr-x--------2  root root  0 Jul 25 16:09 .
+dr-xr-xr-x  6  root root  0 Jul 25 15:58 ..
+lr-x---------1  root root 64 Oct 16 07:32 0 -> /dev/null
+l-wx--------1  root root 64 Oct 16 07:32 1 -> /tmp/zabbix_agentd.log.old (deleted)
+l-wx--------1  root root 64 Oct 16 07:32 2 -> /tmp/zabbix_agentd.log.old (deleted)
+l-wx--------1  root root 64 Oct 16 07:32 3 -> /tmp/zabbix_agentd.pid (deleted)
+lrwx--------1  root root 64 Oct 16 07:32 4 -> socket:[10044]
+f) Para cada arquivo marcado como "deleted" execute o seguinte comando, substituindo o “PID” e o número do arquivo encontrado na listagem anterior.
+
+# : > /proc/PID/fd/N
+
+g) Em seguida, verificar se os tamanhos (SIZE) dos processos (PID) sofreram alteração:
+
+# lsof -nP +L1
+
+h) Verificar se o espaço livre aumentou com o comando:
+
+# df –lh
+
+###########################################################################
+
+Sintoma
+O Zabbix exibe alerta crítico indicando que um determinado servidor está com pouco espaço em disco
+
+Causa Raiz
+Grande quantidade de processos em execução sobrecarregando o recurso disponível
+
+Solução Paliativa
+Investigação e providências (atuação do N2):
+
+1. Acessar o servidor Linux que apresenta o alerta através do Putty/Terminal.
+
+
+2. Há três opções de pesquisa dos arquivos de logs no Jboss e no Apache, para os formatos nome_aquivo.log e nome_arquivo.log.YYYY-MM-DD:
+
+
+a) A pesquisa abaixo retornará todos os arquivos de log do Jboss e Apache:
+Atenção: Se forem exibidas muitas linhas, procurar arquivos de log maiores que 50M, ou seja, executar o próximo comando de pesquisa, item (b).
+
+find -L /brasilia/jboss-* /var/log/httpd/ -regextype posix-extended -regex '(^.*\.log|^.*\.log\.[0-9]{4}-[0-9]{2}-[0-9]{2})' -type f -exec du -sh {} \; | grep -v \.snapshot | grep \/log\/ | grep '[M|G]' --color
+
+b)Arquivos de log Jboss e Apache maiores que 50M:
+Atenção: Se forem exibidas muitas linhas, procurar arquivos de log maiores que 100M, ou seja, executar o próximo comando de pesquisa, item (c).
+
+find -L /brasilia/jboss-* /var/log/httpd/ -regextype posix-extended -regex '(^.*\.log|^.*\.log\.[0-9]{4}-[0-9]{2}-[0-9]{2})' -type f -size +50M -exec du -sh {} \; | grep -v \.snapshot | grep \/log\/ | grep '[M|G]' --color
+
+c)Arquivos de log do Jboss e Apache maiores que 100M:
+
+find -L /brasilia/jboss-* /var/log/httpd/ -regextype posix-extended -regex '(^.*\.log|^.*\.log\.[0-9]{4}-[0-9]{2}-[0-9]{2})' -type f -size +100M -exec du -sh {} \; | grep -v \.snapshot | grep \/log\/ | grep '[M|G]' --color
+
+
+3. Com base numa das pesquisas realizadas:
+- Classificar a lista de arquivos em ordem decrescente de tamanho
+- Selecionar os arquivos que poderão ser compactados.
+- Caso o arquivo já possua a informação de data em seu nome, o mesmo poderá ser compactado sem precisar renomeá-lo, assim como não há necessidade de reiniciar nenhuma instância.
+
+
+4. Quando não há data no nome do arquivo (ex. nome_do_arquivo.log), ou seja, normalmente é o arquivo correntemente em uso pela instância, o espaço
+só será liberado após reiniciar a instância do Jboss. É necessário obter autorização para reiniciar a referida instância jboss onde se encontra o arquivo alvo.
+
+4.1 - Siga a sequência abaixo para reiniciar a instância (Jboss):
+a) Parar a instância do Jboss onde se encontra o arquivo;
+b) Renomear o arquivo alvo;
+c) Subir a instância do Jboss;
+d) Compactar o arquivo renomeado, deixando-o no mesmo local de origem.
+
+4.2 - Caso seja necessário reiniciar também a instância do Apache, considerando que seria um procedimento mais crítico, pois poderá afetar várias aplicações em caso de falha,
+repassar o caso para um membro da equipe que possa orientar sobre a melhor opção e procedimentos pertinentes.
+
+
+Observações Importantes:
+- Renomear nome_do_arquivo.log com o seguinte formato: nome_do_arquivo.HH-MM.log.YYYY-MM-DD
+- Compactar com o comando: gzip nome_do_arquivo.HH-MM.log.YYYY-MM-DD
+
+onde:
+YYYY = ano
+MM = mês
+DD = dia
+HH = hora
+MM = minuto
+###########################################################33
+
+Sintoma
+Alerta Zabbix com o assunto: "LVM thin-pool free ..."
+
+Causa Raiz
+
+
+Solução Paliativa
+Alertas do OPENSHIFT no zabbix do tipo: "LVM thin-pool free ..."
+
+Exemplo:
+LVM thin-pool free meta data on SVU1030:[vg_iscsi_docker_storage/docker-pool is very low (< 15 %, 2.84 MB free)
+
+
+Passos pra solucionar:
+
+1) Entrar no host
+
+Caso queira verificar o tamanho usado e disponível execute o comando abaixo (opcional):
+`docker info | grep Metadata`
+
+2) Resolve-se o problema com os seguintes comandos no host:
+
+`docker rm $(docker ps -q -f status=exited)`
+`docker rmi $(docker images --filter "dangling=true" -q --no-trunc)`
+
+
+3) Novamente, para verificar o tamanho usado e disponível (opcional):
+`docker info | grep Metadata`
