@@ -1,6 +1,12 @@
 
 # Start and Stop instances JbossEap in a Action on zabbix
 
+## Melhorias providas para o ambiente de Middleware
+- Monitorar estado das Instâncias
+   - - Identificar instância travada/parada dos HC's
+- Tomar uma ação(action) após identificar instância travada ou parada.
+
+
 ### Start Instances Jboss
 #### Action
 - Nome da trigger contêm Down!
