@@ -1,0 +1,33 @@
+batch
+# Add the tcpping stack
+/profile=cluster/subsystem=jgroups/stack=tcpping:add
+/profile=cluster/subsystem=jgroups/stack=tcpping/transport=TCP:add(socket-binding=jgroups-tcp)
+/profile=cluster/subsystem=jgroups/stack=tcpping/protocol=TCPPING:add
+
+# Set the properties for the TCPPING protocol
+/profile=cluster/subsystem=jgroups/stack=tcpping/protocol=TCPPING:write-attribute(name=properties,value={initial_hosts="192.168.99.112[7600],192.168.99.121[7600]",port_range=0,timeout=3000})
+/profile=cluster/subsystem=jgroups/stack=tcpping/protocol=MERGE3:add
+/profile=cluster/subsystem=jgroups/stack=tcpping/protocol=FD_SOCK:add(socket-binding=jgroups-tcp-fd)
+/profile=cluster/subsystem=jgroups/stack=tcpping/protocol=FD:add
+/profile=cluster/subsystem=jgroups/stack=tcpping/protocol=VERIFY_SUSPECT:add
+/profile=cluster/subsystem=jgroups/stack=tcpping/protocol=pbcast.NAKACK2:add
+/profile=cluster/subsystem=jgroups/stack=tcpping/protocol=UNICAST3:add
+/profile=cluster/subsystem=jgroups/stack=tcpping/protocol=pbcast.STABLE:add
+/profile=cluster/subsystem=jgroups/stack=tcpping/protocol=pbcast.GMS:add
+/profile=cluster/subsystem=jgroups/stack=tcpping/protocol=MFC:add
+/profile=cluster/subsystem=jgroups/stack=tcpping/protocol=FRAG2:add
+# Set tcpping as the stack for the ee channel
+/profile=cluster/subsystem=jgroups/channel=ee:write-attribute(name=stack,value=tcpping)
+run-batch
+:restart-servers()
+
+-----------------
+[root@master bin]# sudo -u jboss ./jboss-cli.sh --controller=192.168.99.112:9990 -c  --file="stack-tcp.cli"  
+The batch executed successfully
+{
+    "outcome" => "success",
+    "result" => undefined,
+    "server-groups" => undefined
+}
+
+$ tcpdump -i enp0s9 tcp port 7600 
