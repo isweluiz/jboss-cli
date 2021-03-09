@@ -1,11 +1,9 @@
 [include]
 files = supervisord.d/*.ini
 
-
-
-[program:dc_70jboss01]
+[program:jboss01]
 user=jboss
-command=/opt/jboss/bin/domain.sh -Djboss.domain.base.dir=/opt/dc_70jboss01 --host-config=host-master.xml -b 172.25.2.106 -bmanagement 172.25.2.106 -Djboss.domain.log.dir=/jboss_var/dc_70jboss01 -Djboss.domain.temp.dir=/jboss_var/dc_70jboss01/tmp -Djboss.domain.servers.dir=/jboss_var/dc_70jboss01/servers -Djboss.domain.data.dir=/jboss_var/dc_70jboss01/data -c domain.xml
+command=/opt/jboss/bin/domain.sh -Djboss.domain.base.dir=/opt/dc_70jboss01 --host-config=host-master.xml -b 192.168.99.112 -bmanagement 192.168.99.112 -Djboss.domain.log.dir=/jboss_var/dc_70jboss01 -Djboss.domain.temp.dir=/jboss_var/dc_70jboss01/tmp -Djboss.domain.servers.dir=/jboss_var/dc_70jboss01/servers -Djboss.domain.data.dir=/jboss_var/dc_70jboss01/data -c domain.xml
 directory=/opt/jboss
 environment=JAVA_HOME=/opt/java,JBOSS_HOME=/opt/jboss
 redirect_stderr = true
@@ -13,5 +11,5 @@ autostart=true
 autorestart=true
 stopsignal=KILL
 stopasgroup=true
-stdout_logfile=/jboss_var/dc_70jboss01/supervisor/%(program_name)s.log
-stderr_logfile=/jboss_var/dc_70jboss01/supervisor/%(program_name)s.log
+stdout_logfile=/jboss_var/jboss01/supervisor/%(program_name)s.log
+stderr_logfile=/jboss_var/jboss01/supervisor/%(program_name)s.log
