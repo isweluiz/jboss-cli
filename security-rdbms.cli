@@ -1,0 +1,11 @@
+batch
+/profile=full-ha/subsystem=security/security-domain=bksecurity:add
+
+/profile=full-ha/subsystem=security/security-domain=bksecurity/authentication=classic:add
+
+/profile=full-ha/subsystem=security/security-domain=bksecurity/authentication=classic/login-module=Database:add(code=Database,flag=required,module-options=[("dsJndiName"=>"java:jboss/datasources/bksecurity-ds"),("principalsQuery"=>"select password from users where username=?"),("rolesQuery"=>"select role, 'Roles' from roles where username=?"), \ 
+("hashAlgorithm"=>"SHA-256"), \
+("hashEncoding"=>"base64")])
+
+run-batch
+:restart-servers()
